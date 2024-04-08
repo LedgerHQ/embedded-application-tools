@@ -73,17 +73,26 @@ then
         "$ifile"
 fi
 
+bg_color="white"
+
+# common to Stax & Flex
 resize_icon -i "$ifile" \
             -s 64 \
             -m 3 \
-            -b "white" \
-            -o "glyphs/stax_${icon_name}_64px.gif"
+            -b "$bg_color" \
+            -o "glyphs/${icon_name}_64px.gif"
 
 resize_icon -i "$ifile" \
             -s 32 \
             -m 1 \
-            -b "white" \
+            -b "$bg_color" \
             -o "icons/stax_app_${icon_name}.gif"
+
+resize_icon -i "$ifile" \
+            -s 40 \
+            -m 1 \
+            -b "$bg_color" \
+            -o "icons/flex_app_${icon_name}.gif"
 
 # delete temporary icon
 if [ -n "$ifile_bak" ]
