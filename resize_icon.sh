@@ -37,8 +37,24 @@ resize_icon() {
         -colors 16 \
         -bordercolor "$background_color" \
         -border "$target_margin" \
+        -type grayscale \
         "$output_file"
 }
+
+no_crop=false
+
+while getopts "k" OPT
+do
+    case "$OPT" in
+        k) # keep source image margins
+            no_crop=true
+            ;;
+        *)
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
 if [ "$#" -ne 1 ]
 then
@@ -46,17 +62,24 @@ then
     exit 1
 fi
 
-ifile="$1"
-icon_name=$(echo -n "$ifile" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+icon_name=$(echo -n "$1" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+ifile=/tmp/icon.png
+
+if ! "$no_crop"
+then
+    # crop to content
+    convert -background none "$1" -trim +repage "$ifile"
+else
+    cp "$1" "$ifile"
+fi
 
 width=$(identify -format "%w" "$ifile")
 height=$(identify -format "%h" "$ifile")
 
-# check if square
+# make square if not already
 if [ "$width" -ne "$height" ]
 then
-    ifile_bak="$ifile"
-    ifile=/tmp/icon.png
+    mv "$ifile" "$ifile.old"
 
     # max(width, height)
     if [ "$width" -gt "$height" ]
@@ -66,7 +89,7 @@ then
         isize="$height"
     fi
     # generate a temporary square icon
-    convert "$ifile_bak" \
+    convert "$ifile.old" \
         -background none \
         -gravity center \
         -extent "${isize}x${isize}" \
@@ -94,8 +117,5 @@ resize_icon -i "$ifile" \
             -b "$bg_color" \
             -o "icons/flex_app_${icon_name}.gif"
 
-# delete temporary icon
-if [ -n "$ifile_bak" ]
-then
-    rm -f "$ifile"
-fi
+# delete temporary icon(s)
+rm -f "$ifile" "$ifile.old"
