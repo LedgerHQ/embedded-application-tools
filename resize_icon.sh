@@ -37,6 +37,7 @@ resize_icon() {
         -colors 16 \
         -bordercolor "$background_color" \
         -border "$target_margin" \
+        -type grayscale \
         "$output_file"
 }
 
