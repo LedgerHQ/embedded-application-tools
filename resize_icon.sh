@@ -30,7 +30,7 @@ resize_icon() {
     done
     mkdir -p "$(dirname "$output_file")" # create output dir
     resize_target=$((target_size - (target_margin * 2)))
-    convert "$input_file" \
+    magick convert "$input_file" \
         -background "$background_color" \
         -flatten \
         -resize "${resize_target}x${resize_target}" \
@@ -68,7 +68,7 @@ ifile=/tmp/icon.png
 if ! "$no_crop"
 then
     # crop to content
-    convert -background none "$1" -trim +repage "$ifile"
+    magick convert -background none "$1" -trim +repage "$ifile"
 else
     cp "$1" "$ifile"
 fi
@@ -89,7 +89,7 @@ then
         isize="$height"
     fi
     # generate a temporary square icon
-    convert "$ifile.old" \
+    magick convert "$ifile.old" \
         -background none \
         -gravity center \
         -extent "${isize}x${isize}" \
