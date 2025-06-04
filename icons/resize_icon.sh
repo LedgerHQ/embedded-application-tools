@@ -3,9 +3,9 @@
 set -e
 
 resize_icon() {
-    local OPTIND input_file target_size target_margin background_color output_file
+    local OPTIND input_file target_size target_margin target_colors background_color output_file
 
-    while getopts "i:s:m:b:o:" OPT
+    while getopts "i:s:m:c:b:o:" OPT
     do
         case "$OPT" in
             i) # input file
@@ -16,6 +16,9 @@ resize_icon() {
                 ;;
             m) # margin (in px)
                 target_margin="$OPTARG"
+                ;;
+            c) # number of colors
+                target_colors="$OPTARG"
                 ;;
             b) # background color
                 background_color="$OPTARG"
@@ -30,14 +33,20 @@ resize_icon() {
     done
     mkdir -p "$(dirname "$output_file")" # create output dir
     resize_target=$((target_size - (target_margin * 2)))
+    resize_method="resize"
+    if [ "$target_colors" -eq 2 ]
+    then
+        # seems to produce better outputs
+        resize_method="adaptive-resize"
+    fi
     convert "$input_file" \
         -background "$background_color" \
         -flatten \
-        -resize "${resize_target}x${resize_target}" \
-        -colors 16 \
+        -"$resize_method" "${resize_target}x${resize_target}" \
         -bordercolor "$background_color" \
         -border "$target_margin" \
         -type grayscale \
+        -colors "$target_colors" \
         "$output_file"
 }
 
@@ -102,20 +111,37 @@ bg_color="white"
 resize_icon -i "$ifile" \
             -s 64 \
             -m 3 \
+            -c 16 \
             -b "$bg_color" \
             -o "glyphs/${icon_name}_64px.gif"
 
 resize_icon -i "$ifile" \
             -s 32 \
             -m 1 \
+            -c 16 \
             -b "$bg_color" \
             -o "icons/stax_app_${icon_name}.gif"
 
 resize_icon -i "$ifile" \
             -s 40 \
             -m 1 \
+            -c 16 \
             -b "$bg_color" \
             -o "icons/flex_app_${icon_name}.gif"
+
+resize_icon -i "$ifile" \
+            -s 48 \
+            -m 2 \
+            -c 2 \
+            -b "$bg_color" \
+            -o "glyphs/${icon_name}_48px.gif"
+
+resize_icon -i "$ifile" \
+            -s 32 \
+            -m 1 \
+            -c 2 \
+            -b "$bg_color" \
+            -o "icons/apex_app_${icon_name}.gif"
 
 # delete temporary icon(s)
 rm -f "$ifile" "$ifile.old"
