@@ -113,7 +113,7 @@ resize_icon -i "$ifile" \
             -m 3 \
             -c 16 \
             -b "$bg_color" \
-            -o "glyphs/${icon_name}_64px.png"
+            -o "glyphs/stax_${icon_name}_64px.png"
 
 resize_icon -i "$ifile" \
             -s 32 \
@@ -134,7 +134,7 @@ resize_icon -i "$ifile" \
             -m 2 \
             -c 2 \
             -b "$bg_color" \
-            -o "glyphs/${icon_name}_48px.png"
+            -o "glyphs/apex_${icon_name}_48px.png"
 
 resize_icon -i "$ifile" \
             -s 32 \
