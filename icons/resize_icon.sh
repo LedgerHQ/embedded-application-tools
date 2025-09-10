@@ -113,35 +113,35 @@ resize_icon -i "$ifile" \
             -m 3 \
             -c 16 \
             -b "$bg_color" \
-            -o "glyphs/${icon_name}_64px.gif"
+            -o "glyphs/${icon_name}_64px.png"
 
 resize_icon -i "$ifile" \
             -s 32 \
             -m 1 \
             -c 16 \
             -b "$bg_color" \
-            -o "icons/stax_app_${icon_name}.gif"
+            -o "icons/stax_app_${icon_name}.png"
 
 resize_icon -i "$ifile" \
             -s 40 \
             -m 1 \
             -c 16 \
             -b "$bg_color" \
-            -o "icons/flex_app_${icon_name}.gif"
+            -o "icons/flex_app_${icon_name}.png"
 
 resize_icon -i "$ifile" \
             -s 48 \
             -m 2 \
             -c 2 \
             -b "$bg_color" \
-            -o "glyphs/${icon_name}_48px.gif"
+            -o "glyphs/${icon_name}_48px.png"
 
 resize_icon -i "$ifile" \
             -s 32 \
             -m 1 \
             -c 2 \
             -b "$bg_color" \
-            -o "icons/apex_app_${icon_name}.gif"
+            -o "icons/apex_app_${icon_name}.png"
 
 # delete temporary icon(s)
 rm -f "$ifile" "$ifile.old"
