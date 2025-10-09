@@ -33,21 +33,25 @@ resize_icon() {
     done
     mkdir -p "$(dirname "$output_file")" # create output dir
     resize_target=$((target_size - (target_margin * 2)))
-    resize_method="resize"
+    args=()
+    args+=(-background "$background_color")
     if [ "$target_colors" -eq 2 ]
     then
         # seems to produce better outputs
-        resize_method="adaptive-resize"
+        args+=(-adaptive-resize "${resize_target}x${resize_target}")
+    else
+        args+=(-resize "${resize_target}x${resize_target}")
     fi
-    convert "$input_file" \
-        -background "$background_color" \
-        -flatten \
-        -"$resize_method" "${resize_target}x${resize_target}" \
-        -bordercolor "$background_color" \
-        -border "$target_margin" \
-        -type grayscale \
-        -colors "$target_colors" \
-        "$output_file"
+    args+=(-bordercolor "$background_color")
+    args+=(-border "$target_margin")
+    if [ "$target_colors" -eq 2 ]
+    then
+        args+=(-monochrome)
+    else
+        args+=(-type grayscale)
+        args+=(-colors "$target_colors")
+    fi
+    convert "$input_file" "${args[@]}" "$output_file"
 }
 
 no_crop=false
